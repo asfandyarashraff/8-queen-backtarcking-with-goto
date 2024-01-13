@@ -1,0 +1,40 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+  int queens[8], column = 0;
+  queens[0] = 0; // Place a queen in the first row of the first column
+  int solutionCount = 0; // Counter for solutions
+
+nextColumn:
+  ++column; // Move to the next column
+  if(column == 8) goto printSolutions;
+  queens[column] = -1; // Initialize the queen position in the new column
+
+nextRow:
+  ++queens[column]; // Move to the next row in the current column
+  if(queens[column] == 8) goto backtrack;
+  
+  // Check conflicts with already placed queens
+  for(int i = 0; i < column; ++i) {
+    if(queens[i] == queens[column] || (column - i) == abs(queens[column] - queens[i]))
+      goto nextRow; // Conflict found, move to the next row
+  }
+
+  goto nextColumn;
+
+backtrack:
+  --column; // Backtrack to the previous column
+  if(column == -1) return 0; // All solutions found, end the program
+  goto nextRow;
+
+printSolutions:
+  solutionCount++; // Increment the solution counter
+  cout << "Solution #" << solutionCount << ":" << endl;
+  for(int i = 0; i < 8; i++)
+    cout << queens[i];
+  cout << "\n" << endl;
+  goto backtrack;
+
+  return 0; // Added return statement
+}
